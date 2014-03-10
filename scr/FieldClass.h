@@ -1,0 +1,64 @@
+#ifndef __FIELD_CLASS__
+#define __FIELD_CLASS__
+
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+#include "constants.h"
+// Global functions
+//#include "./GlobalFunctions/intInput.h"
+#include "./GlobalFunctions/saveDataIntoFile.h"
+
+// Initial Condition Template
+#include "./InitialCondition/InitialConditionClass.h"
+
+// Solver Template
+#include "./Solvers/TimeSolverClass.h"
+#include "./Solvers/SpatialSolverClass.h"
+
+class FieldClass{
+   private:
+      // Spacial coordinate
+      double* r;
+
+      // Metric Fields
+      double* A;
+      double* delta;
+  
+      // Scalar Field coupled to Metric
+      double* phi;
+      double* Phi;
+      double* Pi;
+      
+      // Probe Field
+      double* Psi;
+
+      // Snapshot and phase space header
+      string snapShotHeader;
+      string phaseSpaceHeader;
+
+      // Specifing solvers
+      TimeSolverClass<SolverClass_RK4> TSolve;
+
+      //TimeSolverClass<SolverClass_FirstOrder> TSolve;
+      SpatialSolverClass<SolverClass_ForwardScheme> SSolve;
+
+      // Field status for checking the error
+      bool status;
+
+   public:
+      FieldClass();
+      // This function initialize the field and prob
+      bool Initialize();
+
+      // This function make the snapshot of data and save it into file
+      bool saveSnapShot(string fname);
+
+      bool solveForOneTimeStep();
+      ~FieldClass();
+
+};
+
+
+#endif
